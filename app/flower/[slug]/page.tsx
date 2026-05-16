@@ -81,10 +81,9 @@ export default async function FlowerPage({
     { label: "28g (1 oz)", p: flower.price28g },
   ].filter((x) => x.p !== null);
 
-  // Find related strains
+  // Find ALL related strains from same tier
   const related = allFlowers
-    .filter((f) => f.tier === flower.tier && f.slug !== flower.slug)
-    .slice(0, 4);
+    .filter((f) => f.tier === flower.tier && f.slug !== flower.slug);
 
   return (
     <>
@@ -207,7 +206,7 @@ export default async function FlowerPage({
                 More{" "}
                 <span style={{ color: tierColor }}>{tierName}</span> Strains
               </h2>
-              <div className={styles.relatedGrid}>
+              <div className={styles.relatedScroll}>
                 {related.map((r) => (
                   <Link
                     key={r.sku}

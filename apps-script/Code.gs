@@ -212,21 +212,32 @@ function buildProductJSON_(catalog, stockData) {
     // Must have at least one weight available
     if (!p3g && !p5g && !p14g && !p28g) continue;
     
+    // Read tags from sheet (add IsHot / IsSale columns to FLOWERS_LIVE for control)
+    var isHotRaw = String(f['IsHot'] || '').trim().toUpperCase();
+    var isSaleRaw = String(f['IsSale'] || '').trim().toUpperCase();
+    var promoImage = String(f['PPromo'] || '').trim() || null;
+    
+    var isHot = (isHotRaw === 'TRUE' || isHotRaw === 'YES' || isHotRaw === '1' || isHotRaw === 'Y');
+    var isSale = (isSaleRaw === 'TRUE' || isSaleRaw === 'YES' || isSaleRaw === '1' || isSaleRaw === 'Y');
+    
+    // Fallback: if no IsSale column, use PPromo as indicator
+    if (!isSaleRaw && promoImage) isSale = true;
+    
     flowers.push({
       sku: sku,
       name: name,
       slug: slugify_(name),
       tier: tier,
       type: detectType_(String(f['Type'] || 'hybrid')),
-      isHot: false,
-      isSale: false,
+      isHot: isHot,
+      isSale: isSale,
       thc: parseThc_(f['THC']),
       price3g: p3g ? { regular: p3g, sale: null } : null,
       price5g: p5g ? { regular: p5g, sale: null } : null,
       price14g: p14g ? { regular: p14g, sale: null } : null,
       price28g: p28g ? { regular: p28g, sale: null } : null,
       image: String(f['ImageURL'] || '').trim(),
-      promoImage: String(f['PPromo'] || '').trim() || null
+      promoImage: promoImage
     });
   }
   

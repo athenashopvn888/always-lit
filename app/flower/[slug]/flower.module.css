@@ -328,15 +328,29 @@
   margin-bottom: 24px;
 }
 
-.relatedGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.relatedScroll {
+  display: flex;
   gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.3) transparent;
 }
 
-@media (min-width: 640px) { .relatedGrid { grid-template-columns: repeat(4, 1fr); } }
+.relatedScroll::-webkit-scrollbar { height: 6px; }
+.relatedScroll::-webkit-scrollbar-track { background: transparent; }
+.relatedScroll::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.3);
+  border-radius: 3px;
+}
 
 .relatedCard {
+  min-width: 180px;
+  max-width: 220px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
