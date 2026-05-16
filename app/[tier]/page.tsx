@@ -142,10 +142,14 @@ function FlowerCard({
   const typeLabel = flower.type === "indica" ? "Indica" : flower.type === "sativa" ? "Sativa" : "Hybrid";
   const typeClass = flower.type === "indica" ? styles.indica : flower.type === "sativa" ? styles.sativa : styles.hybrid;
 
+  // Top 3 tiers get 6g label (Buy 3g Get 3g FREE promo), AA/BUDGET stays 5g
+  const isTopTier = ["EXOTIC", "PREMIUM", "AAA+"].includes(flower.tier);
+  const fiveGLabel = isTopTier ? "6g" : "5g";
+
   // Find the best price to show
   const prices = [
     { label: "3g", p: flower.price3g },
-    { label: "5g", p: flower.price5g },
+    { label: fiveGLabel, p: flower.price5g },
     { label: "14g", p: flower.price14g },
     { label: "28g", p: flower.price28g },
   ].filter((x) => x.p !== null);

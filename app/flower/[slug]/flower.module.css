@@ -108,9 +108,9 @@
   border-radius: 8px;
   font-size: 13px;
   font-weight: 900;
-  background: rgba(0, 0, 0, 0.65);
+  background: #2D6A4F;
   color: white;
-  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.35);
 }
 
 /* -- Details -- */
@@ -140,45 +140,55 @@
   line-height: 1.1;
 }
 
-.metaRow {
+/* -- Strain Meta (clean aligned layout) -- */
+.strainMeta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-
-.typeBadge {
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 5px 14px;
-  border-radius: var(--radius-pill);
-}
-
-.indica { background: rgba(124, 58, 237, 0.12); color: #7C3AED; border: 1px solid rgba(124, 58, 237, 0.25); }
-.sativa { background: rgba(234, 179, 8, 0.1); color: #B45309; border: 1px solid rgba(234, 179, 8, 0.25); }
-.hybrid { background: rgba(45, 106, 79, 0.1); color: #2D6A4F; border: 1px solid rgba(45, 106, 79, 0.2); }
-
-.thcBadge {
-  font-size: 12px;
-  font-weight: 800;
-  padding: 5px 14px;
-  border-radius: var(--radius-pill);
-  background: rgba(45, 106, 79, 0.08);
-  color: var(--green-mid);
-  border: 1px solid rgba(45, 106, 79, 0.2);
-}
-
-.skuBadge {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
+  gap: 16px;
+  padding: 14px 20px;
   background: var(--bg-secondary);
-  color: var(--text-muted);
   border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+}
+
+.strainMetaItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+
+.strainMetaLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.strainMetaValue {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.strainMetaValueGreen {
+  font-size: 15px;
+  font-weight: 800;
+  color: #2D6A4F;
+}
+
+.indica { color: #7C3AED; }
+.sativa { color: #B45309; }
+.hybrid { color: #2D6A4F; }
+
+.strainMetaDivider {
+  width: 1px;
+  height: 28px;
+  background: var(--border-subtle);
+  flex-shrink: 0;
 }
 
 /* -- Effects -- */
@@ -247,6 +257,23 @@
 
 .priceTableRow:last-child { border-bottom: none; }
 .priceTableRow:hover { background: var(--bg-secondary); }
+
+/* Promo label row above price row */
+.promoRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 20px;
+  background: rgba(45, 106, 79, 0.06);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-dark);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.promoIcon {
+  font-size: 14px;
+}
 
 .priceTableRowSale {
   background: rgba(220, 38, 38, 0.04);

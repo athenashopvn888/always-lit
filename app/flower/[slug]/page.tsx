@@ -63,6 +63,9 @@ function getJsonLd(flower: FlowerProduct) {
   };
 }
 
+/* Top 3 tiers get "6g" label (Buy 3g Get 3g FREE promo), AA stays "5g" */
+const TOP_TIERS = ["EXOTIC", "PREMIUM", "AAA+"];
+
 /* -- Page -- */
 export default async function FlowerPage({
   params,
@@ -78,18 +81,22 @@ export default async function FlowerPage({
   const tierName = tierConfig?.name || flower.tier;
   const typeName = flower.type === "indica" ? "Indica" : flower.type === "sativa" ? "Sativa" : "Hybrid";
   const strainData = getStrainData(flower.name, flower.type, flower.tier, flower.thc);
+  const isTopTier = TOP_TIERS.includes(flower.tier);
+
+  // Weight label for 5g column depends on tier
+  const fiveGLabel = isTopTier ? "6g" : "5g";
+  const fiveGGrams = isTopTier ? 6 : 5;
 
   const prices = [
-    { label: "3g", p: flower.price3g },
-    { label: "5g / 6g", p: flower.price5g },
-    { label: "14g (half oz)", p: flower.price14g },
-    { label: "28g (1 oz)", p: flower.price28g },
+    { label: "3g", grams: 3, p: flower.price3g, promo: "Buy 2g Get 1g FREE" },
+    { label: fiveGLabel, grams: fiveGGrams, p: flower.price5g, promo: isTopTier ? "Buy 3g Get 3g FREE" : null },
+    { label: "14g", grams: 14, p: flower.price14g, promo: null },
+    { label: "28g", grams: 28, p: flower.price28g, promo: null },
   ].filter((x) => x.p !== null);
 
   // Cheapest per-gram for value display
-  const perGram = prices.map(({ label, p }) => {
+  const perGram = prices.map(({ grams, p, label }) => {
     if (!p) return null;
-    const grams = label.startsWith("3") ? 3 : label.startsWith("5") ? 5 : label.startsWith("14") ? 14 : 28;
     const price = p.sale ?? p.regular;
     return { perG: +(price / grams).toFixed(2), label, price };
   }).filter(Boolean).sort((a, b) => (a?.perG ?? 99) - (b?.perG ?? 99));
@@ -99,9 +106,6 @@ export default async function FlowerPage({
   // Related strains from same tier
   const related = allFlowers
     .filter((f) => f.tier === flower.tier && f.slug !== flower.slug);
-
-  // Check if any prices have actual sale
-  const hasSalePrice = prices.some(({ p }) => p && p.sale !== null);
 
   return (
     <>
@@ -142,7 +146,7 @@ export default async function FlowerPage({
                 )}
               </div>
 
-              {/* THC badge on image */}
+              {/* THC badge on image - always green */}
               <span className={styles.thcOverlay}>THC {flower.thc}</span>
             </div>
 
@@ -154,13 +158,22 @@ export default async function FlowerPage({
 
               <h1 className={styles.strainName}>{flower.name}</h1>
 
-              {/* Type + Meta badges */}
-              <div className={styles.metaRow}>
-                <span className={`${styles.typeBadge} ${styles[flower.type]}`}>
-                  {typeName}
-                </span>
-                <span className={styles.thcBadge}>THC {flower.thc}</span>
-                <span className={styles.skuBadge}>SKU {flower.sku}</span>
+              {/* Strain info - clean aligned layout instead of pills */}
+              <div className={styles.strainMeta}>
+                <div className={styles.strainMetaItem}>
+                  <span className={styles.strainMetaLabel}>Type</span>
+                  <span className={`${styles.strainMetaValue} ${styles[flower.type]}`}>{typeName}</span>
+                </div>
+                <div className={styles.strainMetaDivider} />
+                <div className={styles.strainMetaItem}>
+                  <span className={styles.strainMetaLabel}>THC</span>
+                  <span className={styles.strainMetaValueGreen}>{flower.thc}</span>
+                </div>
+                <div className={styles.strainMetaDivider} />
+                <div className={styles.strainMetaItem}>
+                  <span className={styles.strainMetaLabel}>SKU</span>
+                  <span className={styles.strainMetaValue}>{flower.sku}</span>
+                </div>
               </div>
 
               {/* Effects */}
@@ -177,22 +190,29 @@ export default async function FlowerPage({
                 <h2 className={styles.pricingTitle}>Pricing</h2>
                 <div className={styles.priceTable}>
                   <div className={styles.priceTableHeader}>
-                    <span>SIZE</span>
+                    <span>WEIGHT</span>
                     <span>PRICE</span>
                   </div>
-                  {prices.map(({ label, p }) => (
-                    <div key={label} className={`${styles.priceTableRow} ${p && p.sale !== null ? styles.priceTableRowSale : ""}`}>
-                      <span className={styles.priceWeight}>{label}</span>
-                      {p && p.sale !== null ? (
-                        <div className={styles.priceSale}>
-                          <span className={styles.priceNew}>${p.sale}</span>
-                          <span className={styles.priceOld}>(was ${p.regular})</span>
+                  {prices.map(({ label, p, promo }) => (
+                    <div key={label}>
+                      {promo && (
+                        <div className={styles.promoRow}>
+                          <span className={styles.promoIcon}>🎁</span> {promo}
                         </div>
-                      ) : (
-                        <span className={styles.priceRegular}>
-                          ${p?.regular}
-                        </span>
                       )}
+                      <div className={`${styles.priceTableRow} ${p && p.sale !== null ? styles.priceTableRowSale : ""}`}>
+                        <span className={styles.priceWeight}>{label}</span>
+                        {p && p.sale !== null ? (
+                          <div className={styles.priceSale}>
+                            <span className={styles.priceNew}>${p.sale}</span>
+                            <span className={styles.priceOld}>(was ${p.regular})</span>
+                          </div>
+                        ) : (
+                          <span className={styles.priceRegular}>
+                            ${p?.regular}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -200,13 +220,6 @@ export default async function FlowerPage({
                 {bestValue && (
                   <div className={styles.valueNote}>
                     Best value: <strong>${bestValue.perG}/g</strong> at {bestValue.label}
-                  </div>
-                )}
-
-                {prices[0]?.p && (
-                  <div className={styles.bonusNote}>
-                    <span className={styles.bonusIcon}>🎁</span>
-                    Buy 2g get 1g FREE = {prices[0].label} for ${prices[0].p.sale ?? prices[0].p.regular}
                   </div>
                 )}
               </div>
@@ -217,28 +230,8 @@ export default async function FlowerPage({
                 <p className={styles.descText}>{strainData.description}</p>
               </div>
 
-              {/* -- Quick info -- */}
-              <div className={styles.infoGrid}>
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Type</span>
-                  <span className={styles.infoValue}>{typeName}</span>
-                </div>
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>THC</span>
-                  <span className={styles.infoValue}>{flower.thc}</span>
-                </div>
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Tier</span>
-                  <span className={styles.infoValue} style={{ color: tierColor }}>{tierName}</span>
-                </div>
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>SKU</span>
-                  <span className={styles.infoValue}>{flower.sku}</span>
-                </div>
-              </div>
-
               <div className={styles.visitCta}>
-                <p>Available in-store · Walk-in welcome · No appointment needed</p>
+                <p>Available in-store &middot; Walk-in welcome &middot; No appointment needed</p>
               </div>
             </div>
           </div>
