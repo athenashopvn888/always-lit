@@ -83,50 +83,69 @@ export async function fetchLiveProducts(): Promise<{
   }
 }
 
-/* ── Tier config ── */
 export const TIER_CONFIG: Record<
   string,
-  { name: string; slug: string; color: string; icon: string; tagline: string; banner: string }
+  {
+    name: string; slug: string; color: string; icon: string; tagline: string; banner: string;
+    unitPrice: number; /* $/g */
+    deal3g: { label: string; total: string; price: number }; /* Buy 2g Get 1g FREE */
+    deal6g: { label: string; total: string; price: number } | null; /* Buy 3g Get 3g FREE (top 3 only) */
+  }
 > = {
   EXOTIC: {
     name: "Exotic",
     slug: "exotic",
     color: "#f59e0b",
-    icon: "🔥",
-    tagline: "Ultra-rare, top-shelf genetics · THC 35-39%",
+    icon: "\uD83D\uDD25",
+    tagline: "Ultra-rare, top-shelf genetics \u00B7 THC 35-39%",
     banner: "/banners/exotic_premium_cannabis_with_glowing_accents.webp",
+    unitPrice: 20,
+    deal3g: { label: "Buy 2g Get 1g FREE", total: "3G", price: 40 },
+    deal6g: { label: "Buy 3g Get 3g FREE", total: "6G", price: 60 },
   },
   PREMIUM: {
     name: "Premium",
     slug: "premium",
     color: "#a78bfa",
-    icon: "💎",
-    tagline: "Hand-picked connoisseur grade · THC 32-34%",
+    icon: "\uD83D\uDC8E",
+    tagline: "Hand-picked connoisseur grade \u00B7 THC 32-34%",
     banner: "/banners/premium_cannabis_with_glowing_accents.webp",
+    unitPrice: 15,
+    deal3g: { label: "Buy 2g Get 1g FREE", total: "3G", price: 30 },
+    deal6g: { label: "Buy 3g Get 3g FREE", total: "6G", price: 45 },
   },
   "AAA+": {
     name: "AAA+",
     slug: "aaa",
     color: "#22d3ee",
-    icon: "⚡",
-    tagline: "Heavy hitters, proven strains · THC 30-32%",
+    icon: "\u26A1",
+    tagline: "Heavy hitters, proven strains \u00B7 THC 30-32%",
     banner: "/banners/electric_neon_cannabis_ad_banner.webp",
+    unitPrice: 10,
+    deal3g: { label: "Buy 2g Get 1g FREE", total: "3G", price: 20 },
+    deal6g: { label: "Buy 3g Get 3g FREE", total: "6G", price: 30 },
   },
   AA: {
     name: "AA",
     slug: "aa",
     color: "#34d399",
-    icon: "🌿",
-    tagline: "Quality daily drivers · THC 27-29%",
+    icon: "\uD83C\uDF3F",
+    tagline: "Quality daily drivers \u00B7 THC 27-29%",
     banner: "/banners/neon_cannabis_product_showcase.webp",
+    unitPrice: 5,
+    deal3g: { label: "Buy 2g Get 1g FREE", total: "3G", price: 10 },
+    deal6g: null,
   },
   BUDGET: {
     name: "Budget",
     slug: "budget",
     color: "#94a3b8",
-    icon: "💰",
-    tagline: "Shreds & value OZs · From $40/oz",
+    icon: "\uD83D\uDCB0",
+    tagline: "Shreds & value OZs \u00B7 From $40/oz",
     banner: "/banners/premium_budget_cannabis_deal_showcase.webp",
+    unitPrice: 3,
+    deal3g: { label: "Buy 2g Get 1g FREE", total: "3G", price: 10 },
+    deal6g: null,
   },
 };
 

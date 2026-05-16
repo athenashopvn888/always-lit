@@ -225,7 +225,7 @@
   color: var(--text-primary);
 }
 
-/* Table-style pricing */
+/* Table-style pricing — 3 columns */
 .priceTable {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
@@ -234,8 +234,8 @@
 }
 
 .priceTableHeader {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 80px;
   padding: 10px 20px;
   background: var(--bg-secondary);
   font-size: 11px;
@@ -246,9 +246,13 @@
   border-bottom: 1px solid var(--border-subtle);
 }
 
+.priceTableHeader span:last-child {
+  text-align: right;
+}
+
 .priceTableRow {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 80px;
   align-items: center;
   padding: 14px 20px;
   border-bottom: 1px solid var(--border-subtle);
@@ -258,21 +262,28 @@
 .priceTableRow:last-child { border-bottom: none; }
 .priceTableRow:hover { background: var(--bg-secondary); }
 
-/* Promo label row above price row */
-.promoRow {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 20px;
-  background: rgba(45, 106, 79, 0.06);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--green-dark);
+/* Deal group — visually joins promo banner + price row */
+.dealGroup {
+  border-left: 3px solid #2D6A4F;
+  background: rgba(45, 106, 79, 0.03);
   border-bottom: 1px solid var(--border-subtle);
 }
 
-.promoIcon {
-  font-size: 14px;
+.dealGroup .priceTableRow {
+  border-bottom: none;
+}
+
+.dealBanner {
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2D6A4F;
+  background: rgba(45, 106, 79, 0.08);
+  border-bottom: 1px solid rgba(45, 106, 79, 0.12);
+}
+
+.dealBanner strong {
+  color: #1B4332;
 }
 
 .priceTableRowSale {
@@ -281,7 +292,7 @@
 
 .priceWeight {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
@@ -307,6 +318,13 @@
   font-size: 14px;
   color: var(--text-muted);
   text-decoration: line-through;
+}
+
+.pricePerGram {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-align: right;
 }
 
 .valueNote {

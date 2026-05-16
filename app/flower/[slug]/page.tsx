@@ -192,29 +192,35 @@ export default async function FlowerPage({
                   <div className={styles.priceTableHeader}>
                     <span>WEIGHT</span>
                     <span>PRICE</span>
+                    <span>$/G</span>
                   </div>
-                  {prices.map(({ label, p, promo }) => (
-                    <div key={label}>
-                      {promo && (
-                        <div className={styles.promoRow}>
-                          <span className={styles.promoIcon}>🎁</span> {promo}
-                        </div>
-                      )}
-                      <div className={`${styles.priceTableRow} ${p && p.sale !== null ? styles.priceTableRowSale : ""}`}>
-                        <span className={styles.priceWeight}>{label}</span>
-                        {p && p.sale !== null ? (
-                          <div className={styles.priceSale}>
-                            <span className={styles.priceNew}>${p.sale}</span>
-                            <span className={styles.priceOld}>(was ${p.regular})</span>
+                  {prices.map(({ label, grams, p, promo }) => {
+                    const effectivePrice = p ? (p.sale ?? p.regular) : 0;
+                    const perG = effectivePrice > 0 ? (effectivePrice / grams).toFixed(2) : "—";
+                    return (
+                      <div key={label} className={promo ? styles.dealGroup : ""}>
+                        {promo && (
+                          <div className={styles.dealBanner}>
+                            🎁 {promo} = <strong>${effectivePrice} / {label.toUpperCase()}</strong>
                           </div>
-                        ) : (
-                          <span className={styles.priceRegular}>
-                            ${p?.regular}
-                          </span>
                         )}
+                        <div className={`${styles.priceTableRow} ${p && p.sale !== null ? styles.priceTableRowSale : ""}`}>
+                          <span className={styles.priceWeight}>{label}</span>
+                          {p && p.sale !== null ? (
+                            <div className={styles.priceSale}>
+                              <span className={styles.priceNew}>${p.sale}</span>
+                              <span className={styles.priceOld}>${p.regular}</span>
+                            </div>
+                          ) : (
+                            <span className={styles.priceRegular}>
+                              ${p?.regular}
+                            </span>
+                          )}
+                          <span className={styles.pricePerGram}>${perG}</span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {bestValue && (
