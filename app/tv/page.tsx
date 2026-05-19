@@ -557,11 +557,11 @@ function AddOnsCard({ items, hiIdx }: { items: Item[]; hiIdx: number }) {
    VERTICAL TICKER — slides up, 3s per section
    ══════════════════════════════════════════════ */
 const TICKER_SLIDES = [
-  🔥  — ,
-  200+ Strains In Stock,
-  Open 24 Hours,
-  ALL SALES ARE FINAL,
-  🎮 Play Games at /games,
+  "🔥 Always Lit Cannabis — 176 Dalhousie St, Ottawa",
+  "200+ Strains In Stock",
+  "Open 24 Hours",
+  "ALL SALES ARE FINAL",
+  "🎮 Play Games at alwayslitcannabis.com/games",
 ];
 
 function VerticalTicker() {
