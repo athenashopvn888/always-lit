@@ -2,9 +2,11 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import { allFlowers, TIER_CONFIG, type FlowerProduct, type PricePoint } from "../../lib/products";
 import { getStrainData } from "../../lib/strainData";
 import RelatedScroll from "./RelatedScroll";
+import Magnifier from "../../components/Magnifier";
 import styles from "./flower.module.css";
 
 /* -- Pre-generate all flower pages -- */
@@ -131,7 +133,7 @@ export default async function FlowerPage({
             {/* -- Image -- */}
             <div className={styles.imageWrap}>
               {flower.image ? (
-                <img src={flower.image} alt={flower.name} className={styles.image} />
+                <Magnifier src={flower.image} alt={flower.name} className={styles.image} />
               ) : (
                 <div className={styles.imagePlaceholder}>{flower.name[0]}</div>
               )}
@@ -251,6 +253,8 @@ export default async function FlowerPage({
             />
           )}
         </div>
+
+        <Footer />
       </main>
     </>
   );

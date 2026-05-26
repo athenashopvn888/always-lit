@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import styles from "./contact.module.css";
 
 export const metadata: Metadata = {
@@ -144,20 +145,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className={styles.footer}>
-        <div className={styles.footerInner}>
-          <div className={styles.footerBrand}>
-            ALWAYS<span style={{ color: "var(--fire-orange)" }}>🔥</span>LIT
-          </div>
-          <p className={styles.footerText}>
-            644 Queen St W, Toronto, ON M6J 1E4 · Open Daily 10AM–3AM
-          </p>
-          <p className={styles.footerLegal}>
-            © {new Date().getFullYear()} Always Lit Cannabis. Must be 19+ to
-            enter. Please consume responsibly.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

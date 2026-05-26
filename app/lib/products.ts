@@ -88,7 +88,7 @@ export const TIER_CONFIG: Record<
   {
     name: string; slug: string; color: string; icon: string; tagline: string; banner: string;
     unitPrice: number; /* $/g */
-    deal3g: { label: string; total: string; price: number }; /* Buy 2g Get 1g FREE */
+    deal3g: { label: string; total: string; price: number } | null; /* Buy 2g Get 1g FREE */
     deal6g: { label: string; total: string; price: number } | null; /* Buy 3g Get 3g FREE (top 3 only) */
   }
 > = {
@@ -129,11 +129,11 @@ export const TIER_CONFIG: Record<
     name: "AA",
     slug: "aa",
     color: "#34d399",
-    icon: "\uD83C\uDF3F",
+    icon: "\u2726",
     tagline: "Quality daily drivers \u00B7 THC 27-29%",
     banner: "/banners/neon_cannabis_product_showcase.webp",
-    unitPrice: 5,
-    deal3g: { label: "Buy 2g Get 1g FREE", total: "3G", price: 10 },
+    unitPrice: 4,
+    deal3g: null,
     deal6g: null,
   },
   BUDGET: {
@@ -150,18 +150,94 @@ export const TIER_CONFIG: Record<
 };
 
 /* ── Item category config ── */
-export const CATEGORY_CONFIG: Record<
-  string,
-  { name: string; slug: string; color: string; icon: string }
-> = {
-  EDIBLES: { name: "Edibles", slug: "edibles", color: "#f97316", icon: "🍬" },
-  "VAPE PENS": { name: "Vape Pens", slug: "vapes", color: "#8b5cf6", icon: "💨" },
-  "VAPE DISPOSABLE": { name: "Vape Disposables", slug: "vape-disposables", color: "#a78bfa", icon: "💨" },
-  CONCENTRATES: { name: "Concentrates", slug: "concentrates", color: "#f59e0b", icon: "💎" },
-  PREROLLS: { name: "Pre-Rolls", slug: "prerolls", color: "#22c55e", icon: "🚬" },
-  "ADD ONS": { name: "Add Ons", slug: "add-ons", color: "#34d399", icon: "➕" },
-  CIGARETTES: { name: "Cigarettes", slug: "cigarettes", color: "#94a3b8", icon: "🚬" },
-  "MAGIC & OTHERS": { name: "Magic & Others", slug: "magic", color: "#ec4899", icon: "🍄" },
+export interface CategoryInfo {
+  name: string; slug: string; color: string; icon: string;
+  seoTitle: string; seoIntro: string; seoDescription: string;
+  faqs: { q: string; a: string }[];
+}
+
+export const CATEGORY_CONFIG: Record<string, CategoryInfo> = {
+  EDIBLES: {
+    name: "Edibles", slug: "edibles", color: "#f97316", icon: "🍬",
+    seoTitle: "Cannabis Edibles Toronto — Gummies, Chocolates & Drinks",
+    seoIntro: "Browse the full cannabis edibles menu at Always Lit Cannabis on Queen St W, Toronto. We carry THC gummies, chocolates, drinks, and more from top Canadian brands.",
+    seoDescription: "Looking for cannabis edibles in Toronto? Always Lit Cannabis stocks a wide range of THC-infused gummies, chocolates, beverages, and baked goods. Our edibles range from micro-dose options for beginners to high-potency products for experienced consumers. All products are lab-tested and sourced from licensed Canadian producers. Visit us at 644 Queen St W — open daily 10 AM to 3 AM.",
+    faqs: [
+      { q: "What cannabis edibles do you carry?", a: "We stock THC gummies, chocolates, beverages, capsules, and baked goods from top Canadian brands. Potencies range from 10mg to 1000mg+ THC." },
+      { q: "How long do edibles take to kick in?", a: "Cannabis edibles typically take 30-90 minutes to take effect. Start with a low dose (5-10mg) and wait at least 2 hours before consuming more." },
+      { q: "Can I buy edibles at Always Lit Cannabis?", a: "Yes! Visit us at 644 Queen St W, Toronto. We're open daily 10 AM to 3 AM with a full edibles selection in store." },
+    ],
+  },
+  "VAPE PENS": {
+    name: "Vape Pens", slug: "vapes", color: "#8b5cf6", icon: "💨",
+    seoTitle: "Vape Pens Toronto — THC & Nicotine Cartridges",
+    seoIntro: "Shop THC and nicotine vape pens at Always Lit Cannabis, Toronto. Cartridges, 510-thread batteries, and premium vape brands — all in stock.",
+    seoDescription: "Always Lit Cannabis carries a curated selection of vape pens and cartridges in Toronto. From 510-thread THC cartridges to nicotine vape pods, we stock the most popular brands and flavours. Our knowledgeable budtenders can help you choose the right cartridge and battery setup. Visit us at 644 Queen St W for the best vape selection in Queen West.",
+    faqs: [
+      { q: "What vape pens do you sell?", a: "We carry 510-thread THC cartridges, nicotine vape pods, disposable vapes, and compatible batteries from top Canadian brands." },
+      { q: "Do you sell vape batteries?", a: "Yes! We stock 510-thread batteries and pod systems that pair with our cartridge selection." },
+    ],
+  },
+  "VAPE DISPOSABLE": {
+    name: "Vape Disposables", slug: "vape-disposables", color: "#a78bfa", icon: "💨",
+    seoTitle: "Disposable Vapes Toronto — THC Disposable Pens",
+    seoIntro: "THC disposable vapes available at Always Lit Cannabis, Toronto. No charging, no refilling — just open and enjoy.",
+    seoDescription: "Disposable THC vapes are the easiest way to enjoy cannabis on the go. Always Lit Cannabis stocks a wide selection of pre-charged, pre-filled disposable vape pens with various strain profiles and potencies. Perfect for beginners and experienced users alike. Visit us at 644 Queen St W, Toronto.",
+    faqs: [
+      { q: "How long does a disposable vape last?", a: "Most disposable THC vapes contain 0.5g-1g of distillate and last between 100-300 puffs depending on usage." },
+      { q: "Are disposable vapes rechargeable?", a: "Most are designed for single use, but some models include a USB-C charging port to ensure you can use the full cartridge." },
+    ],
+  },
+  CONCENTRATES: {
+    name: "Concentrates", slug: "concentrates", color: "#f59e0b", icon: "💎",
+    seoTitle: "Cannabis Concentrates Toronto — Shatter, Wax, Hash & Live Resin",
+    seoIntro: "Premium cannabis concentrates at Always Lit Cannabis, Toronto. Shatter, wax, hash, live resin, and diamonds — all in stock.",
+    seoDescription: "Always Lit Cannabis offers a premium selection of cannabis concentrates in Toronto. From traditional hash and kief to modern extracts like shatter, wax, live resin, and THC diamonds, we carry products for every preference and potency level. Our concentrates are sourced from trusted extractors and tested for purity. Visit us at 644 Queen St W.",
+    faqs: [
+      { q: "What types of concentrates do you carry?", a: "We stock shatter, wax, budder, live resin, rosin, hash, kief, and THC diamonds from top Canadian extractors." },
+      { q: "How do I consume concentrates?", a: "Concentrates can be dabbed with a rig, vaped with a concentrate pen, or added to flower in a joint or bowl for extra potency." },
+    ],
+  },
+  PREROLLS: {
+    name: "Pre-Rolls", slug: "prerolls", color: "#22c55e", icon: "🚬",
+    seoTitle: "Pre-Rolls Toronto — Ready-to-Smoke Cannabis Joints",
+    seoIntro: "Pre-rolled cannabis joints at Always Lit Cannabis, Toronto. Singles, multi-packs, and infused pre-rolls — ready to light up.",
+    seoDescription: "Skip the rolling and grab a pre-roll from Always Lit Cannabis in Toronto. We carry singles, multi-packs, and infused pre-rolls from premium flower. Whether you want a quick smoke or a party pack, our pre-roll selection has something for everyone. Visit us at 644 Queen St W — open daily 10 AM to 3 AM.",
+    faqs: [
+      { q: "What pre-rolls do you carry?", a: "We stock singles, 3-packs, and multi-packs in various strains and potencies, including infused pre-rolls with concentrates." },
+      { q: "Are your pre-rolls made with quality flower?", a: "Yes! Our pre-rolls are filled with ground flower from our regular menu tiers — not shake or trim." },
+    ],
+  },
+  "ADD ONS": {
+    name: "Accessories", slug: "add-ons", color: "#34d399", icon: "➕",
+    seoTitle: "Cannabis Accessories Toronto — Grinders, Papers, Lighters & More",
+    seoIntro: "Essential cannabis accessories at Always Lit Cannabis, Toronto. Grinders, rolling papers, lighters, trays, and more.",
+    seoDescription: "Always Lit Cannabis carries all the accessories you need for the perfect smoke session. From premium grinders and rolling papers to lighters, trays, and storage containers, we have everything in stock. Visit us at 644 Queen St W, Toronto.",
+    faqs: [
+      { q: "What accessories do you sell?", a: "We carry grinders, rolling papers, filter tips, lighters, rolling trays, storage jars, and more." },
+    ],
+  },
+  CIGARETTES: {
+    name: "Cigarettes", slug: "cigarettes", color: "#78716c", icon: "🏷️",
+    seoTitle: "Native Cigarettes Toronto — Discount Tobacco at Always Lit",
+    seoIntro: "Discount native cigarettes at Always Lit Cannabis, Toronto. Premium and value brands at the best prices on Queen St W.",
+    seoDescription: "Always Lit Cannabis is your go-to source for affordable native cigarettes in Toronto. We carry a wide selection of premium and value tobacco brands at competitive prices. Located at 644 Queen St W in the heart of Queen West, we're open daily 10 AM to 3 AM. Stop by for the best cigarette prices in the neighbourhood.",
+    faqs: [
+      { q: "Do you sell cigarettes at Always Lit?", a: "Yes! We carry a wide selection of native cigarette brands at competitive prices." },
+      { q: "What cigarette brands do you carry?", a: "We stock a variety of premium and value native cigarette brands. Visit us to see our full in-store selection." },
+      { q: "Are your cigarette prices competitive?", a: "Absolutely. We offer some of the best cigarette prices in the Queen West area of Toronto." },
+    ],
+  },
+  "MAGIC & OTHERS": {
+    name: "Magic & Others", slug: "magic", color: "#ec4899", icon: "🍄",
+    seoTitle: "Magic Mushrooms & More — Toronto",
+    seoIntro: "Magic mushrooms, psilocybin products, and specialty items at Always Lit Cannabis, Toronto.",
+    seoDescription: "Always Lit Cannabis carries a curated selection of magic mushrooms and specialty products in Toronto. From micro-dose capsules to dried psilocybin mushrooms, we stock products for both beginners and experienced psychonauts. Visit us at 644 Queen St W for our full selection.",
+    faqs: [
+      { q: "Do you sell magic mushrooms?", a: "Yes, we carry dried magic mushrooms, micro-dose capsules, and psilocybin edibles." },
+      { q: "What is micro-dosing?", a: "Micro-dosing involves taking very small amounts of psilocybin (typically 0.1-0.3g) for subtle cognitive and mood benefits without a full psychedelic experience." },
+    ],
+  },
 };
 
 /* ── Helper functions ── */
